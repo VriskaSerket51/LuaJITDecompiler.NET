@@ -4,7 +4,7 @@ namespace LuaJitDecompiler.Net.RawDump;
 
 public static class OpCodes
 {
-    public static readonly List<(int, IDef)> v20_OPCODES = new List<(int, IDef)>()
+    public static readonly List<(int, IDef)> v20_OPCODES = new()
     {
         // Comparison ops
         (0x00, Instructions.ISLT), // @UndefinedVariable
@@ -158,7 +158,7 @@ public static class OpCodes
         (0x5C, Instructions.FUNCCW) // @UndefinedVariable
     };
 
-    public static readonly List<(int, IDef)> v21_OPCODES = new List<(int, IDef)>()
+    public static readonly List<(int, IDef)> v21_OPCODES = new()
     {
 // Comparison ops
 

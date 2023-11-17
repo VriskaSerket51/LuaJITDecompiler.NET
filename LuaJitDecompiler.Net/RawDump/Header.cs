@@ -14,15 +14,15 @@ public class Flags
 public class Header
 {
     private static readonly byte[] Magic = { 0x1b, (byte)'L', (byte)'J' };
-    private const int MaxVersion = 0x80;
+    private const int MAX_VERSION = 0x80;
 
-    private const byte FlagIsBigEndian = 0b00000001;
-    private const byte FlagIsStripped = 0b00000010;
-    private const byte FlagHasFfi = 0b00000100;
-    private const byte FlagFr2 = 0b00001000;
+    private const byte FLAG_IS_BIG_ENDIAN = 0b00000001;
+    private const byte FLAG_IS_STRIPPED = 0b00000010;
+    private const byte FLAG_HAS_FFI = 0b00000100;
+    private const byte FLAG_FR2 = 0b00001000;
 
     public int Version { get; set; }
-    public Flags Flags { get; set; } = new Flags();
+    public Flags Flags { get; set; } = new();
     public string Origin { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
 
@@ -56,7 +56,7 @@ public class Header
     {
         header.Version = parser.Stream.ReadByte();
 
-        if (header.Version > MaxVersion)
+        if (header.Version > MAX_VERSION)
         {
             Log.ErrPrint("Version {0}: proprietary modifications", header.Version);
             return false;
@@ -69,17 +69,17 @@ public class Header
     {
         int bits = (int)parser.Stream.ReadUleb128();
 
-        header.Flags.IsBigEndian = (bits & FlagIsBigEndian) != 0;
-        bits &= ~FlagIsBigEndian;
+        header.Flags.IsBigEndian = (bits & FLAG_IS_BIG_ENDIAN) != 0;
+        bits &= ~FLAG_IS_BIG_ENDIAN;
 
-        header.Flags.IsStripped = (bits & FlagIsStripped) != 0;
-        bits &= ~FlagIsStripped;
+        header.Flags.IsStripped = (bits & FLAG_IS_STRIPPED) != 0;
+        bits &= ~FLAG_IS_STRIPPED;
 
-        header.Flags.HasFfi = (bits & FlagHasFfi) != 0;
-        bits &= ~FlagHasFfi;
+        header.Flags.HasFfi = (bits & FLAG_HAS_FFI) != 0;
+        bits &= ~FLAG_HAS_FFI;
 
-        header.Flags.Fr2 = (bits & FlagFr2) != 0;
-        bits &= ~FlagFr2;
+        header.Flags.Fr2 = (bits & FLAG_FR2) != 0;
+        bits &= ~FLAG_FR2;
 
         parser.Flags.IsStripped = header.Flags.IsStripped;
         if (bits != 0)

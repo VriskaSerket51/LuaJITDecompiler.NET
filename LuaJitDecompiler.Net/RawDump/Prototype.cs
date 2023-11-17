@@ -6,11 +6,11 @@ namespace LuaJitDecompiler.Net.RawDump;
 
 public class Prototype
 {
-    private const byte FLAG_HAS_CHILD = 0b00000001;
-    private const byte FLAG_IS_VARIADIC = 0b00000010;
-    private const byte FLAG_HAS_FFI = 0b00000100;
-    private const byte FLAG_JIT_DISABLED = 0b00001000;
-    private const byte FLAG_HAS_ILOOP = 0b00010000;
+    private const byte FlagHasChild = 0b00000001;
+    private const byte FlagIsVariadic = 0b00000010;
+    private const byte FlagHasFfi = 0b00000100;
+    private const byte FlagJitDisabled = 0b00001000;
+    private const byte FlagHasIloop = 0b00010000;
 
     public BinStream Stream { get; set; }
     public Flags Flags { get; set; }
@@ -71,20 +71,20 @@ public class Prototype
     {
         int bits = wrapper.Stream.ReadByte();
 
-        prototype.Flags.HasFfi = (bits & FLAG_HAS_FFI) != 0;
-        bits &= ~FLAG_HAS_FFI;
+        prototype.Flags.HasFfi = (bits & FlagHasFfi) != 0;
+        bits &= ~FlagHasFfi;
 
-        prototype.Flags.HasIloop = (bits & FLAG_HAS_ILOOP) != 0;
-        bits &= ~FLAG_HAS_ILOOP;
+        prototype.Flags.HasIloop = (bits & FlagHasIloop) != 0;
+        bits &= ~FlagHasIloop;
 
-        prototype.Flags.HasJit = (bits & FLAG_JIT_DISABLED) == 0;
-        bits &= ~FLAG_JIT_DISABLED;
+        prototype.Flags.HasJit = (bits & FlagJitDisabled) == 0;
+        bits &= ~FlagJitDisabled;
 
-        prototype.Flags.HasSubPrototypes = (bits & FLAG_HAS_CHILD) != 0;
-        bits &= ~FLAG_HAS_CHILD;
+        prototype.Flags.HasSubPrototypes = (bits & FlagHasChild) != 0;
+        bits &= ~FlagHasChild;
 
-        prototype.Flags.IsVariadic = (bits & FLAG_IS_VARIADIC) != 0;
-        bits &= ~FLAG_IS_VARIADIC;
+        prototype.Flags.IsVariadic = (bits & FlagIsVariadic) != 0;
+        bits &= ~FlagIsVariadic;
 
         if (bits != 0)
         {

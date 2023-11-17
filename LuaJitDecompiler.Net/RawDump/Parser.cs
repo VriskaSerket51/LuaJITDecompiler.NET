@@ -5,12 +5,12 @@ namespace LuaJitDecompiler.Net.RawDump;
 
 public class Parser
 {
-    public BinStream Stream { get; set; } = new BinStream();
-    public Flags Flags { get; set; } = new Flags();
-    public List<Bytecode.Prototype> Prototypes { get; set; } = new List<Bytecode.Prototype>();
+    public BinStream Stream { get; set; } = new();
+    public Flags Flags { get; set; } = new();
+    public List<Bytecode.Prototype> Prototypes { get; set; } = new();
 
 
-    public static (Header, Bytecode.Prototype)? Parse(string filename, Action<Header> onParseHeader = null)
+    public static (Header, Bytecode.Prototype)? Parse(string filename, Action<Header>? onParseHeader = null)
     {
         var parser = new Parser();
         parser.Stream.Open(filename);

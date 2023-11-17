@@ -62,7 +62,7 @@ public class Constants
             else if (constantType == BCDUMP_KGC_TAB)
             {
                 Table table = new Table();
-                if (!_readTable(parser, table))
+                if (!ReadTable(parser, table))
                 {
                     return false;
                 }
@@ -100,19 +100,18 @@ public class Constants
 
         while (i < parser.NumericConstantsCount)
         {
-            bool isNum;
             uint lo;
-            (isNum, lo) = parser.Stream.ReadUleb128From33Bit();
+            (var isNum, lo) = parser.Stream.ReadUleb128From33Bit();
 
             object number;
             if (isNum)
             {
                 uint hi = parser.Stream.ReadUleb128();
-                number = _assembleNumber(lo, hi);
+                number = AssembleNumber(lo, hi);
             }
             else
             {
-                number = _processSign(lo);
+                number = ProcessSign(lo);
             }
 
             numericConstants.Add(number);
@@ -127,16 +126,16 @@ public class Constants
     {
         uint lo = parser.Stream.ReadUleb128();
         uint hi = parser.Stream.ReadUleb128();
-        return _assembleNumber(lo, hi);
+        return AssembleNumber(lo, hi);
     }
 
-    private static int _readSignedInt(Prototype parser)
+    private static int ReadSignedInt(Prototype parser)
     {
         uint number = parser.Stream.ReadUleb128();
-        return _processSign(number);
+        return ProcessSign(number);
     }
 
-    private static double _assembleNumber(uint lo, uint hi)
+    private static double AssembleNumber(uint lo, uint hi)
     {
         long floatAsInt;
         if (BitConverter.IsLittleEndian)
@@ -148,27 +147,27 @@ public class Constants
         return BitConverter.ToDouble(rawBytes, 0);
     }
 
-    private static int _processSign(uint number)
+    private static int ProcessSign(uint number)
     {
         return (int)((number & 0x80000000) != 0 ? -0x100000000 + number : number);
     }
 
-    private static bool _readTable(Prototype parser, Table table)
+    private static bool ReadTable(Prototype parser, Table table)
     {
         int arrayItemsCount = (int)parser.Stream.ReadUleb128();
         int hashItemsCount = (int)parser.Stream.ReadUleb128();
 
         while (arrayItemsCount > 0)
         {
-            object constant = _readTableItem(parser);
+            object constant = ReadTableItem(parser);
             table.Array.Add(constant);
             arrayItemsCount -= 1;
         }
 
         while (hashItemsCount > 0)
         {
-            object key = _readTableItem(parser);
-            object value = _readTableItem(parser);
+            object key = ReadTableItem(parser);
+            object value = ReadTableItem(parser);
             table.Dictionary.Add(new Tuple<object, object>(key, value));
             hashItemsCount -= 1;
         }
@@ -176,7 +175,7 @@ public class Constants
         return true;
     }
 
-    private static object _readTableItem(Prototype parser)
+    private static object ReadTableItem(Prototype parser)
     {
         int dataType = (int)parser.Stream.ReadUleb128();
 
@@ -188,7 +187,7 @@ public class Constants
         }
         else if (dataType == BCDUMP_KTAB_INT)
         {
-            return _readSignedInt(parser);
+            return ReadSignedInt(parser);
         }
         else if (dataType == BCDUMP_KTAB_NUM)
         {
