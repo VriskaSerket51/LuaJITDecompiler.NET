@@ -1,2 +1,2 @@
 # LuaJITDecompiler.NET
-.NET fork of luajit-decompiler(https://github.com/Dr-MTN/luajit-decompiler)
+.NET fork of [luajit-decompiler](https://gitlab.com/znixian/luajit-decompiler)
